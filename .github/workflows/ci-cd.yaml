@@ -82,6 +82,11 @@ jobs:
         run: npx tauri build
         working-directory: apps/client
 
+      - name: Print directory structure
+        run: |
+          echo "Listing contents of target directory:"
+          ls -R apps/client/src-tauri/target/release/bundle/
+
       - name: Upload artifacts
         if: success()
         uses: actions/upload-artifact@v3
