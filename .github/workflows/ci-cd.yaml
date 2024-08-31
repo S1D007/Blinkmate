@@ -1,0 +1,96 @@
+name: CI/CD Pipeline  blinkmate Project
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  HUSKY: 0
+  SHELL: /bin/bash
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Set up pnpm
+        run: npm i -g pnpm && pnpm setup
+
+      - name: Cache pnpm dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.pnpm-store
+            **/node_modules
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Set PNPM_HOME
+        run: echo "PNPM_HOME=$(pnpm config get global-bin-dir)" >> $GITHUB_ENV
+
+      - name: Add pnpm global bin to PATH
+        run: echo "$PNPM_HOME" >> $GITHUB_PATH
+
+      - name: Set up Rust environment
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          components: clippy
+
+      - name: Install Tauri CLI
+        run: npm install -g @tauri-apps/cli
+
+      - name: Install system dependencies for Ubuntu
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libglib2.0-dev \
+            libgtk-3-dev \
+            libsoup2.4-dev \
+            libjavascriptcoregtk-4.0-dev \
+            libwebkit2gtk-4.0-dev
+
+      - name: Install system dependencies for macOS
+        if: runner.os == 'macOS'
+        run: |
+          brew update
+          brew install gtk+3 libsoup javascriptcoregtk webkit2gtk
+
+      - name: Set PKG_CONFIG_PATH for Ubuntu
+        if: runner.os == 'Linux'
+        run: echo "PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/share/pkgconfig" >> $GITHUB_ENV
+
+      - name: Set PKG_CONFIG_PATH for macOS
+        if: runner.os == 'macOS'
+        run: echo "PKG_CONFIG_PATH=/usr/local/lib/pkgconfig" >> $GITHUB_ENV
+
+      - name: Build Tauri application
+        run: npx tauri build
+        working-directory: apps/client
+
+      - name: Upload artifacts
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: blinkmate-${{ matrix.os }}
+          path: src-tauri/target/release/bundle/
