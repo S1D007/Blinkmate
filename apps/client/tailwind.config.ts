@@ -9,6 +9,17 @@ const config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        thin: ['Gilroy-Thin', 'sans-serif'],
+        normal: ['Gilroy-Normal', 'sans-serif'],
+        regular: ['Gilroy-Regular', 'sans-serif'],
+        medium: ['Gilroy-Medium', 'sans-serif'],
+        semibold: ['Gilroy-Semibold', 'sans-serif'],
+        bold: ['Gilroy-Bold', 'sans-serif'],
+        extrabold: ['Gilroy-ExtraBold', 'sans-serif'],
+        black: ['Gilroy-Black', 'sans-serif'],
+        heavy: ['Gilroy-Heavy', 'sans-serif'],
+      },
       animation: {
         ripple: 'ripple var(--duration,2s) ease calc(var(--i, 0)*.2s) infinite',
       },
