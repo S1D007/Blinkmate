@@ -27,7 +27,6 @@ function Page() {
       />
 
       <div className="relative z-10 flex justify-center items-center h-full flex-col text-center">
-        {/* <h1 className="text-white text-6xl capitalize font-bold">Blink Mate</h1> */}
         <HyperText text="Blink Mate" className="text-4xl font-bold text-black dark:text-white" />
         <h1 className="text-gray-400 text-xl capitalize font-normal">
           Your Personal Wellness Companion for Screen Time
