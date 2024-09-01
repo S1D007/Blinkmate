@@ -11,6 +11,7 @@
     "version": "0.1.0"
   },
   "tauri": {
+    "macOSPrivateApi": true,
     "allowlist": {
       "all": false
     },
@@ -60,10 +61,15 @@
         "decorations": false,
         "resizable": false,
         "fullscreen": false,
+        "transparent": true,
         "width": 600,
         "height": 400,
         "alwaysOnTop": true,
-        "skipTaskbar": true
+        "skipTaskbar": true,
+        "closable": true,
+        "acceptFirstMouse": true,
+        "fileDropEnabled": true,
+        "titleBarStyle": "Transparent"
       }
     ],
     "systemTray": {

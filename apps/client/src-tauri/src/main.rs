@@ -1,7 +1,4 @@
-use tauri::{
-  CustomMenuItem, Manager, Menu, MenuItem, PhysicalPosition, Submenu, SystemTray,
-  SystemTrayEvent, WindowEvent,
-};
+use tauri::{CustomMenuItem, Manager, Menu, MenuItem, PhysicalPosition, Submenu, SystemTray, SystemTrayEvent, WindowEvent};
 
 fn main() {
   // Menu Items
@@ -54,6 +51,11 @@ fn main() {
   tauri::Builder::default()
       .menu(menu)
       .system_tray(system_tray)
+      .setup(|app| {
+          let window = app.get_window("main").unwrap();
+          window.set_decorations(false).unwrap(); // Remove title bar and borders for custom window shape
+          Ok(())
+      })
       .on_system_tray_event(|app, event| {
           if let SystemTrayEvent::LeftClick { position, .. } = event {
               let window = app.get_window("main").unwrap();
