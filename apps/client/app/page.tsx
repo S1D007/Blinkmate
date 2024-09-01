@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import FlickeringGridBackground from '@/components/backgrounds/FlickeringGridBackground';
 import { useRouter } from 'next/navigation';
 import HyperText from '@/components/texts/HyperText';
+import { Button } from '@nextui-org/react';
 
 function Page() {
   const router = useRouter();
