@@ -63,7 +63,7 @@
         "fullscreen": false,
         "transparent": true,
         "width": 600,
-        "height": 400,
+        "height": 600,
         "alwaysOnTop": true,
         "skipTaskbar": true,
         "closable": true,
